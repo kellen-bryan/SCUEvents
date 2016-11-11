@@ -4,21 +4,72 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Net;
+using final;
+using System.Diagnostics;
              
 namespace SCUEvents
 {
-	public class Mainpage : ContentPage 
+	public class Mainpage : ContentPage
 	{
 		Image logo;
-		Button my_events_nav, day_button, week_button, month_button, event_specific_nav;
+		Button my_events_nav, day_button, week_button, month_button, event_specific_nav, day_event, week_event, month_event;
 		Entry search_entry;
+		Label event_title;
+		List<EventItem> eventList = new List<EventItem>();
+		ListView listview;
 
 		public Mainpage()
 		{
+			listview = new ListView();
+			listview.ItemsSource = new[] { "alpha", "beta", "gamma", "delta" };
+			listview.ItemTapped += async (sender, e) =>
+			{
+				Debug.WriteLine("Tapped: " + e.Item);
+				//await DisplayAlert("Tapped", e.Item + " row was tapped", "OK");
+				await Navigation.PushAsync(new EventSpecificPage(e.Item.ToString()));
+				((ListView)sender).SelectedItem = null; // de-select the row
+			};
+
+			eventList.Add(new EventItem
+			{
+				Name = "Name",
+				Date = "Date",
+				Location = "Location",
+				Time = "Time",
+				Info = "Info"
+			});
+
+			event_title = new Label
+			{
+				Text = eventList[0].Name
+			};
+
+			day_event = new Button
+			{
+				Text = "Event today",
+				BorderWidth = 1,
+				TextColor = Color.Maroon
+			};
+
+			week_event = new Button
+			{
+				Text = "Event this week",
+				BorderWidth = 1,
+				TextColor = Color.Maroon
+			};
+
+			month_event = new Button
+			{
+				Text = "Event this month",
+				BorderWidth = 1,
+				TextColor = Color.Maroon
+			};
+
+
 
 			logo = new Image
 			{
-				Source = ImageSource.FromResource("SCUEvents.SCU_Events_logo.jpg"),
+				Source = ImageSource.FromResource("final.SCU_Events_logo.jpg"),
 				WidthRequest = 300,
 				HeightRequest = 50
 			};
@@ -74,14 +125,19 @@ namespace SCUEvents
 				WidthRequest = 140,
 				TextColor = Color.Maroon
 			};
-				
+
 
 
 			my_events_nav.Clicked += buttonClicked;
 			event_specific_nav.Clicked += buttonClicked;
+			day_event.Clicked += buttonClicked;
+			week_event.Clicked += buttonClicked;
+			month_event.Clicked += buttonClicked;
+
 			NavigationPage.SetHasNavigationBar(this, false);
 
-	Content = new StackLayout
+
+			Content = new StackLayout
 			{
 				Padding = 20,
 				Orientation = StackOrientation.Vertical,
@@ -103,8 +159,34 @@ namespace SCUEvents
 						}
 					},
 
-					my_events_nav,
-					event_specific_nav
+					listview,
+					/*
+					new ListView
+					{
+						ItemsSource  = new[] { "Event Today", "Event This Week", "Event This Month" }
+					},
+					*/
+
+				
+				/*
+				new StackLayout
+				{
+					Orientation = StackOrientation.Vertical,
+					VerticalOptions = LayoutOptions.CenterAndExpand,
+					Spacing = 18,
+					Children =
+					{
+						day_event,
+						week_event,
+						month_event,
+						event_title
+					}
+				},
+				*/
+
+				my_events_nav,
+				event_specific_nav
+
 				}
 			};
 		}
@@ -133,9 +215,24 @@ namespace SCUEvents
 			{
 			}
 
+			if (sender == day_event)
+			{
+				Navigation.PushAsync(new EventSpecificPage(day_event.Text));
+			}
+
+			if (sender == week_event)
+			{
+				Navigation.PushAsync(new EventSpecificPage(week_event.Text));
+			}
+
+			if (sender == month_event)
+			{
+				Navigation.PushAsync(new EventSpecificPage(month_event.Text));
+			}
+
 			if (sender == event_specific_nav)
 			{
-				Navigation.PushAsync(new EventSpecificPage());
+				Navigation.PushAsync(new EventSpecificPage("event specific nav"));
 				this.Title = "Home";
 			}
 		}
