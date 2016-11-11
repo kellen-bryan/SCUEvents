@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Net;
+using HtmlAgilityPack;
              
 namespace SCUEvents
 {
@@ -12,9 +13,22 @@ namespace SCUEvents
 		Image logo;
 		Button my_events_nav, day_button, week_button, month_button, event_specific_nav;
 		Entry search_entry;
+		Label event_title;
+		string url = "https://www.scu.edu/events/";
+		List<EventItem> eventList = new List<EventItem>();
+
+		int EventListIndex;
 
 		public Mainpage()
 		{
+			eventList.Add(new EventItem
+			{
+				Name = "Name",
+				Date = "Date",
+				Location = "Location",
+				Time = "Time",
+				Info = "Info"
+			});
 
 			logo = new Image
 			{
@@ -74,6 +88,12 @@ namespace SCUEvents
 				WidthRequest = 140,
 				TextColor = Color.Maroon
 			};
+
+			event_title = new Label
+			{
+				Text = eventList[0].Name
+				//Text = eventList[0].Name
+			};
 				
 
 
@@ -89,6 +109,8 @@ namespace SCUEvents
 				{
 					logo,
 					search_entry,
+					event_title,
+
 
 					new StackLayout
 					{
