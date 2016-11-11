@@ -7,7 +7,7 @@ namespace SCUEvents
 	{
 		public App()
 		{
-
+			
 			MainPage = new NavigationPage( new Mainpage());
 
 			/*// The root page of your application
