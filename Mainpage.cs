@@ -15,13 +15,43 @@ namespace SCUEvents
 		Button my_events_nav, day_button, week_button, month_button, event_specific_nav, day_event, week_event, month_event;
 		Entry search_entry;
 		Label event_title;
-		List<EventItem> eventList = new List<EventItem>();
+		List<EventItem> eventList; 
 		ListView listview;
 
 		public Mainpage()
 		{
+			eventList = new List<EventItem>();
+
+			eventList.Add(new EventItem
+			{
+				Name = "Day Event",
+				Date = "Date",
+				Location = "Location",
+				Time = "Time",
+				Info = "Info"
+			});
+
+			eventList.Add(new EventItem
+			{
+				Name = "Week Event",
+				Date = "Date",
+				Location = "Location",
+				Time = "Time",
+				Info = "Info"
+			});
+
+			eventList.Add(new EventItem
+			{
+				Name = "Month Event",
+				Date = "Date",
+				Location = "Location",
+				Time = "Time",
+				Info = "Info"
+			});
+
 			listview = new ListView();
-			listview.ItemsSource = new[] { "alpha", "beta", "gamma", "delta" };
+
+			listview.ItemsSource = new[] { eventList[0].Name, eventList[1].Name, eventList[2].Name };
 			listview.ItemTapped += async (sender, e) =>
 			{
 				Debug.WriteLine("Tapped: " + e.Item);
@@ -30,14 +60,6 @@ namespace SCUEvents
 				((ListView)sender).SelectedItem = null; // de-select the row
 			};
 
-			eventList.Add(new EventItem
-			{
-				Name = "Name",
-				Date = "Date",
-				Location = "Location",
-				Time = "Time",
-				Info = "Info"
-			});
 
 			event_title = new Label
 			{
@@ -160,32 +182,8 @@ namespace SCUEvents
 					},
 
 					listview,
-					/*
-					new ListView
-					{
-						ItemsSource  = new[] { "Event Today", "Event This Week", "Event This Month" }
-					},
-					*/
-
-				
-				/*
-				new StackLayout
-				{
-					Orientation = StackOrientation.Vertical,
-					VerticalOptions = LayoutOptions.CenterAndExpand,
-					Spacing = 18,
-					Children =
-					{
-						day_event,
-						week_event,
-						month_event,
-						event_title
-					}
-				},
-				*/
-
-				my_events_nav,
-				event_specific_nav
+					my_events_nav,
+					//event_specific_nav
 
 				}
 			};
@@ -230,11 +228,13 @@ namespace SCUEvents
 				Navigation.PushAsync(new EventSpecificPage(month_event.Text));
 			}
 
+			/*
 			if (sender == event_specific_nav)
 			{
 				Navigation.PushAsync(new EventSpecificPage("event specific nav"));
 				this.Title = "Home";
 			}
+			*/
 		}
 				
 	}
