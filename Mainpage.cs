@@ -15,14 +15,20 @@ namespace SCUEvents
 		Button my_events_nav, day_button, week_button, month_button, event_specific_nav, day_event, week_event, month_event;
 		Entry search_entry;
 		Label event_title;
-		List<EventItem> eventList; 
-		ListView listview;
+		List<EventItem> eventList;
+		ListView listview_all;
+
+		App app = (App)Application.Current; 
 
 		public Mainpage()
 		{
-			eventList = new List<EventItem>();
 
-			eventList.Add(new EventItem
+			//set collection to listview
+			listview_all = new ListView();
+			listview_all.ItemsSource = app.AllEvents_collection;
+
+
+			app.AllEvents_collection.Add(new EventItem
 			{
 				Name = "Day Event",
 				Date = "Date",
@@ -31,7 +37,7 @@ namespace SCUEvents
 				Info = "Info"
 			});
 
-			eventList.Add(new EventItem
+			app.AllEvents_collection.Add(new EventItem
 			{
 				Name = "Week Event",
 				Date = "Date",
@@ -40,7 +46,7 @@ namespace SCUEvents
 				Info = "Info"
 			});
 
-			eventList.Add(new EventItem
+			app.AllEvents_collection.Add(new EventItem
 			{
 				Name = "Month Event",
 				Date = "Date",
@@ -49,21 +55,9 @@ namespace SCUEvents
 				Info = "Info"
 			});
 
-			listview = new ListView();
-
-			listview.ItemsSource = new[] { eventList[0].Name, eventList[1].Name, eventList[2].Name };
-			listview.ItemTapped += async (sender, e) =>
-			{
-				Debug.WriteLine("Tapped: " + e.Item);
-				//await DisplayAlert("Tapped", e.Item + " row was tapped", "OK");
-				await Navigation.PushAsync(new EventSpecificPage(e.Item.ToString()));
-				((ListView)sender).SelectedItem = null; // de-select the row
-			};
-
-
 			event_title = new Label
 			{
-				Text = eventList[0].Name
+				//Text = app.MyEvents_collection
 			};
 
 			day_event = new Button
@@ -156,6 +150,14 @@ namespace SCUEvents
 			week_event.Clicked += buttonClicked;
 			month_event.Clicked += buttonClicked;
 
+			listview_all.ItemTapped += async (sender, e) =>
+			{
+			Debug.WriteLine("Tapped: " + e.Item);
+				//await DisplayAlert("Tapped", e.Item + " row was tapped", "OK");
+				await Navigation.PushAsync(new EventSpecificPage(app.AllEvents_collection[0]));
+			((ListView)sender).SelectedItem = null; // de-select the row
+			};
+
 			NavigationPage.SetHasNavigationBar(this, false);
 
 
@@ -181,7 +183,7 @@ namespace SCUEvents
 						}
 					},
 
-					listview,
+					listview_all,
 					my_events_nav,
 					//event_specific_nav
 
@@ -215,26 +217,18 @@ namespace SCUEvents
 
 			if (sender == day_event)
 			{
-				Navigation.PushAsync(new EventSpecificPage(day_event.Text));
+				Navigation.PushAsync(new EventSpecificPage((EventItem)listview_all.SelectedItem));
 			}
 
 			if (sender == week_event)
 			{
-				Navigation.PushAsync(new EventSpecificPage(week_event.Text));
+				Navigation.PushAsync(new EventSpecificPage((EventItem)listview_all.SelectedItem));
 			}
 
 			if (sender == month_event)
 			{
-				Navigation.PushAsync(new EventSpecificPage(month_event.Text));
+				Navigation.PushAsync(new EventSpecificPage((EventItem)listview_all.SelectedItem));
 			}
-
-			/*
-			if (sender == event_specific_nav)
-			{
-				Navigation.PushAsync(new EventSpecificPage("event specific nav"));
-				this.Title = "Home";
-			}
-			*/
 		}
 				
 	}

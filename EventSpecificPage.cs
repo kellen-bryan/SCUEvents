@@ -1,20 +1,28 @@
 ﻿using System;
 using SCUEvents;
 using Xamarin.Forms;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO;
+using System.Net;
+using final;
+using System.Diagnostics;
 
 namespace SCUEvents
 {
 	public class EventSpecificPage : ContentPage
 	{
-		Button add_to_events, myevents_button;
+		Button add_to_events, myevents_button, remove_button;
 		Label event_label, desc;
 		Image logo;
 
-		public EventSpecificPage(string event_name)
+		App app = (App)Application.Current;
+
+		public EventSpecificPage(EventItem item)
 		{
 			event_label = new Label
 			{
-				Text = event_name, //"{0}", event_name[i]TextColor = Color.Maroon,
+				Text = item.Name,
 				BackgroundColor = Color.Silver,
 				TextColor = Color.Maroon,
 				HorizontalTextAlignment = TextAlignment.Center,
@@ -23,7 +31,7 @@ namespace SCUEvents
 
 			desc = new Label
 			{
-				Text = "\n\nDate: \nTime:\n\nthis is a sample description for " + event_name,
+				Text = "\n\nDate: " +item.Date + "\nTime: " + item.Time + "\n\nthis is a sample description for " + item.Name
 			};
 
 			add_to_events = new Button
@@ -36,6 +44,17 @@ namespace SCUEvents
 				TextColor = Color.Maroon,
 				VerticalOptions = LayoutOptions.End
 
+			};
+
+			remove_button = new Button
+			{
+				Text = "Remove from MyEvents",
+				BorderWidth = 1,
+				BorderColor = Color.Maroon,
+				HeightRequest = 30,
+				WidthRequest = 140,
+				TextColor = Color.Maroon,
+				VerticalOptions = LayoutOptions.End
 			};
 
 			myevents_button = new Button
@@ -58,6 +77,7 @@ namespace SCUEvents
 
 			add_to_events.Clicked += buttonClicked;
 			myevents_button.Clicked += buttonClicked;
+			remove_button.Clicked += buttonClicked;
 
 			Content = new StackLayout
 			{
@@ -66,11 +86,13 @@ namespace SCUEvents
 				{
 					logo,
 					event_label,
-					add_to_events,
+
 					desc,
 					new StackLayout{
 						VerticalOptions = LayoutOptions.End,
 						Children= {
+							add_to_events,
+							remove_button,
 							myevents_button
 						}
 					}
@@ -83,10 +105,15 @@ namespace SCUEvents
 			if (sender == add_to_events)
 			{
 				DisplayAlert("Go Broncos!", "This event has been added to your MyEvents Page", "OK");
+				app.MyEvents_collection.Add(app.AllEvents_collection[0]);
 			}
 			else if (sender == myevents_button)
 			{
 				Navigation.PushAsync(new MyEventsPage());
+			}
+			else if (sender == remove_button)
+			{
+				DisplayAlert("Success","Event has been removed", "OK");
 			}
 		}
 	}
