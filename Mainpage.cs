@@ -12,10 +12,8 @@ namespace SCUEvents
 	public class Mainpage : ContentPage
 	{
 		Image logo;
-		Button my_events_nav, day_button, week_button, month_button, event_specific_nav, day_event, week_event, month_event;
+		Button my_events_nav, day_button, week_button, month_button, event_specific_nav;
 		Entry search_entry;
-		Label event_title;
-		List<EventItem> eventList;
 		ListView listview_all;
 
 		App app = (App)Application.Current; 
@@ -54,33 +52,6 @@ namespace SCUEvents
 				Time = "Time",
 				Info = "Info"
 			});
-
-			event_title = new Label
-			{
-				//Text = app.MyEvents_collection
-			};
-
-			day_event = new Button
-			{
-				Text = "Event today",
-				BorderWidth = 1,
-				TextColor = Color.Maroon
-			};
-
-			week_event = new Button
-			{
-				Text = "Event this week",
-				BorderWidth = 1,
-				TextColor = Color.Maroon
-			};
-
-			month_event = new Button
-			{
-				Text = "Event this month",
-				BorderWidth = 1,
-				TextColor = Color.Maroon
-			};
-
 
 
 			logo = new Image
@@ -146,15 +117,12 @@ namespace SCUEvents
 
 			my_events_nav.Clicked += buttonClicked;
 			event_specific_nav.Clicked += buttonClicked;
-			day_event.Clicked += buttonClicked;
-			week_event.Clicked += buttonClicked;
-			month_event.Clicked += buttonClicked;
 
 			listview_all.ItemTapped += async (sender, e) =>
 			{
 			Debug.WriteLine("Tapped: " + e.Item);
 				//await DisplayAlert("Tapped", e.Item + " row was tapped", "OK");
-				await Navigation.PushAsync(new EventSpecificPage(app.AllEvents_collection[0]));
+				await Navigation.PushAsync(new EventSpecificPage((EventItem)listview_all.SelectedItem));
 			((ListView)sender).SelectedItem = null; // de-select the row
 			};
 
@@ -213,21 +181,6 @@ namespace SCUEvents
 
 			if (sender == search_entry)
 			{
-			}
-
-			if (sender == day_event)
-			{
-				Navigation.PushAsync(new EventSpecificPage((EventItem)listview_all.SelectedItem));
-			}
-
-			if (sender == week_event)
-			{
-				Navigation.PushAsync(new EventSpecificPage((EventItem)listview_all.SelectedItem));
-			}
-
-			if (sender == month_event)
-			{
-				Navigation.PushAsync(new EventSpecificPage((EventItem)listview_all.SelectedItem));
 			}
 		}
 				
