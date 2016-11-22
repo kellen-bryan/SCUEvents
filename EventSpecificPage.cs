@@ -46,7 +46,9 @@ namespace SCUEvents
 
 			desc = new Label
 			{
-				Text = "\nDate: " + item.Date + "\nTime: " + item.Time + "\nLocation: " + item.Location + "\n\n" + item.Info + " \n\n"
+				Text = "\nDate: " + item.Date + "\nTime: " + item.Time + "\nLocation: " + item.Location + "\n\n" + item.Info + " \n\n",
+				HorizontalTextAlignment = TextAlignment.Center,
+				FontAttributes = FontAttributes.Bold
 			};
 
 			add_to_events = new Button
@@ -70,7 +72,7 @@ namespace SCUEvents
 				WidthRequest = 160,
 				TextColor = Color.Maroon,
 				VerticalOptions = LayoutOptions.End,
-				IsEnabled = false
+				IsVisible = false
 			};
 
 			logo = new Image
@@ -82,8 +84,6 @@ namespace SCUEvents
 
 			add_to_events.Clicked += buttonClicked;
 			remove_button.Clicked += buttonClicked;
-
-
 
 			Content = new StackLayout
 			{
@@ -105,15 +105,16 @@ namespace SCUEvents
 				}
 			};
 
+			//makes proper button visible to user
 			if (app.MyEvents_collection.Contains(item))
 			{
-				remove_button.IsEnabled = true;
-				add_to_events.IsEnabled = false;
+				remove_button.IsVisible = true;
+				add_to_events.IsVisible = false;
 			}
 			else
 			{
-				remove_button.IsEnabled = false;
-				add_to_events.IsEnabled = true;
+				remove_button.IsVisible = false;
+				add_to_events.IsVisible = true;
 			}
 		}
 
@@ -123,8 +124,8 @@ namespace SCUEvents
 			{
 				app.MyEvents_collection.Add(app.AllEvents_collection[app.current_event_index]);
 				DisplayAlert("Go Broncos!", "This event has been added to your MyEvents Page", "OK");
-				add_to_events.IsEnabled = false;
-				remove_button.IsEnabled = true;
+				add_to_events.IsVisible = false;
+				remove_button.IsVisible = true;
 			}
 			else if (sender == remove_button)
 			{
@@ -133,8 +134,8 @@ namespace SCUEvents
 				else
 					app.MyEvents_collection.Remove(app.MyEvents_collection[app.current_event_index]);
 				DisplayAlert("Success", "Event has been removed", "OK");
-				add_to_events.IsEnabled = true;
-				remove_button.IsEnabled = false;
+				add_to_events.IsVisible = true;
+				remove_button.IsVisible = false;
 			}
 		}
 	}
