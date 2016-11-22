@@ -12,7 +12,7 @@ namespace SCUEvents
 	public class Mainpage : ContentPage
 	{
 		Image logo;
-		Button my_events_nav, day_button, week_button, month_button, event_specific_nav;
+		Button my_events_nav, day_button, week_button, month_button;
 		Entry search_entry;
 		ListView listview_all;
 
@@ -103,20 +103,7 @@ namespace SCUEvents
 				PlaceholderColor = Color.Gray
 			};
 
-			event_specific_nav = new Button
-			{
-				Text = "Event Specific Nav Test",
-				BorderWidth = 1,
-				BorderColor = Color.Maroon,
-				HeightRequest = 30,
-				WidthRequest = 140,
-				TextColor = Color.Maroon
-			};
-
-
-
 			my_events_nav.Clicked += buttonClicked;
-			event_specific_nav.Clicked += buttonClicked;
 
 			listview_all.ItemTapped += async (sender, e) =>
 			{
@@ -152,9 +139,7 @@ namespace SCUEvents
 					},
 
 					listview_all,
-					my_events_nav,
-					//event_specific_nav
-
+					my_events_nav
 				}
 			};
 		}

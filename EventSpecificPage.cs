@@ -20,6 +20,14 @@ namespace SCUEvents
 
 		public EventSpecificPage(EventItem item)
 		{
+			//get item index
+			for (int i = 0; i < app.AllEvents_collection.Count; i++)
+			{
+				if (string.Equals(item.Name, app.AllEvents_collection[i].Name) == true)
+					app.current_event_index = i;
+			}
+
+
 			event_label = new Label
 			{
 				Text = item.Name,
@@ -31,7 +39,7 @@ namespace SCUEvents
 
 			desc = new Label
 			{
-				Text = "\n\nDate: " +item.Date + "\nTime: " + item.Time + "\n\nthis is a sample description for " + item.Name
+				Text = "\n\nDate: " + item.Date + "\nTime: " + item.Time + "\n\nthis is a sample description for " + item.Name
 			};
 
 			add_to_events = new Button
@@ -79,6 +87,7 @@ namespace SCUEvents
 			myevents_button.Clicked += buttonClicked;
 			remove_button.Clicked += buttonClicked;
 
+
 			Content = new StackLayout
 			{
 				Orientation = StackOrientation.Vertical,
@@ -104,8 +113,8 @@ namespace SCUEvents
 		{
 			if (sender == add_to_events)
 			{
+				app.MyEvents_collection.Add(app.AllEvents_collection[app.current_event_index]);
 				DisplayAlert("Go Broncos!", "This event has been added to your MyEvents Page", "OK");
-				app.MyEvents_collection.Add(app.AllEvents_collection[0]);
 			}
 			else if (sender == myevents_button)
 			{
@@ -114,6 +123,7 @@ namespace SCUEvents
 			else if (sender == remove_button)
 			{
 				DisplayAlert("Success","Event has been removed", "OK");
+				app.MyEvents_collection.Remove(app.AllEvents_collection[app.current_event_index]);
 			}
 		}
 	}
