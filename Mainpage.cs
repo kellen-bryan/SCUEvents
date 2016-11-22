@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Net;
-using final;
 using System.Diagnostics;
-             
+using System.Collections.ObjectModel;
+using System.Linq;
+
+
 namespace SCUEvents
 {
 	public class Mainpage : ContentPage
@@ -16,49 +18,56 @@ namespace SCUEvents
 		Entry search_entry;
 		ListView listview_all;
 
-		App app = (App)Application.Current; 
+		App app = (App)Application.Current;
 
 		public Mainpage()
 		{
 
 			//set collection to listview
-			listview_all = new ListView();
-			listview_all.ItemsSource = app.AllEvents_collection;
+			listview_all = new ListView()
+			{
+				ItemsSource = app.AllEvents_collection,
+				SeparatorColor = Color.Maroon,
+				IsPullToRefreshEnabled = true
+			};
+
+			//call when refreshing
+			listview_all.Refreshing += OnRefresh;
 
 			if (app.AllEvents_collection.Count == 0)//w/out this line the page adds another set of sample data
 			{
 
 				app.AllEvents_collection.Add(new EventItem
 				{
-					Name = "Day Event",
-					Date = "Date",
-					Location = "Location",
-					Time = "Time",
-					Info = "Info"
+					Name = "Men's Basketball vs. Gonzaga",
+					Date = "(Today)",
+					Location = "Leavy Athletic Center",
+					Time = "7:00PM",
+					Info = "Santa Clara Men's basketball team faces off against #14 ranked Gonzaga"
 				});
 
 				app.AllEvents_collection.Add(new EventItem
 				{
-					Name = "Week Event",
-					Date = "Date",
-					Location = "Location",
-					Time = "Time",
-					Info = "Info"
+					Name = "Undergraduate Photo Exhibit",
+					Date = "(This week)",
+					Location = "Art Building",
+					Time = "12:00PM-7:00PM",
+					Info = "Undergraduates show off their photography skills in new exhibit, this week only"
 				});
 
 				app.AllEvents_collection.Add(new EventItem
 				{
-					Name = "Month Event",
-					Date = "Date",
-					Location = "Location",
-					Time = "Time",
-					Info = "Info"
+					Name = "Jazz Band Performance",
+					Date = "(Later this month)",
+					Location = "Mayer Theatre",
+					Time = "6:00PM",
+					Info = "The SCU jazz ensemble will be performing their holidy concert"
 				});
 			}
 
 			logo = new Image
 			{
-				Source = ImageSource.FromResource("final.SCU_Events_logo.jpg"),
+				Source = ImageSource.FromResource("SCUEvents.SCU_Events_logo.jpg"),
 				WidthRequest = 300,
 				HeightRequest = 50
 			};
@@ -109,12 +118,15 @@ namespace SCUEvents
 
 			listview_all.ItemTapped += async (sender, e) =>
 			{
-			Debug.WriteLine("Tapped: " + e.Item);
+				this.Title = "Home";
+				Debug.WriteLine("Tapped: " + e.Item);
 				await Navigation.PushAsync(new EventSpecificPage((EventItem)listview_all.SelectedItem));
-			((ListView)sender).SelectedItem = null; // de-select the row
+				((ListView)sender).SelectedItem = null; // de-select the row
 				app.all_or_my_index = 0;//now we know this comes from home
+
 			};
 
+			//hides nav bar on main page
 			NavigationPage.SetHasNavigationBar(this, false);
 
 
@@ -170,6 +182,25 @@ namespace SCUEvents
 			{
 			}
 		}
-				
+
+		void OnRefresh(object sender, EventArgs e)
+		{
+			var list = (ListView)sender;
+
+			//check for new events added
+			var itemList = app.AllEvents_collection.ToList();
+
+			//clear old list
+			app.AllEvents_collection.Clear();
+
+			//add updated list
+			foreach (var s in itemList)
+			{
+				app.AllEvents_collection.Add(s);
+			}
+			//end the refresh state
+			list.IsRefreshing = false;
+		}
+
 	}
 }

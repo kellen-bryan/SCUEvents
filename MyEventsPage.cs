@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Net;
-using final;
 using System.Diagnostics;
 
 namespace SCUEvents
@@ -12,7 +11,7 @@ namespace SCUEvents
 	public class MyEventsPage : ContentPage
 	{
 		Label main_label;
-		Button day_button, month_button, week_button, home_button;
+		Button day_button, month_button, week_button;
 		Image logo;
 		ListView listview_my;
 
@@ -20,12 +19,16 @@ namespace SCUEvents
 
 		public MyEventsPage()
 		{
-			listview_my = new ListView();
-			listview_my.ItemsSource = app.MyEvents_collection;
+			listview_my = new ListView()
+			{
+				ItemsSource = app.MyEvents_collection,
+				SeparatorColor = Color.Maroon,
+				IsPullToRefreshEnabled = true
+			};
 
 			logo = new Image
 			{
-				Source = ImageSource.FromResource("final.SCU_Events_logo.jpg"),
+				Source = ImageSource.FromResource("SCUEvents.SCU_Events_logo.jpg"),
 				WidthRequest = 300,
 				HeightRequest = 50
 			};
@@ -34,7 +37,6 @@ namespace SCUEvents
 			{
 				Text = "MyEvents",
 				TextColor = Color.Maroon,
-				BackgroundColor = Color.Silver,
 				HorizontalTextAlignment = TextAlignment.Center,
 				FontSize = 40
 			};
@@ -63,26 +65,13 @@ namespace SCUEvents
 				TextColor = Color.Maroon,
 			};
 
-			home_button = new Button
-			{
-				Text = "Home",
-				BorderWidth = 1,
-				BorderColor = Color.Maroon,
-				HeightRequest = 30,
-				WidthRequest = 140,
-				TextColor = Color.Maroon,
-				VerticalOptions = LayoutOptions.End
-			};
-
-			home_button.Clicked += onButtonClicked;
-
 			listview_my.ItemTapped += async (sender, e) =>
 			{
-			Debug.WriteLine("Tapped: " + e.Item);
+				Debug.WriteLine("Tapped: " + e.Item);
 				//await DisplayAlert("Tapped", e.Item + " row was tapped", "OK");
 				await Navigation.PushAsync(new EventSpecificPage((EventItem)listview_my.SelectedItem));
-			((ListView)sender).SelectedItem = null; // de-select the row
-				app.all_or_my_index = 1;//now we know this comes from myevents
+				((ListView)sender).SelectedItem = null; // de-select the row
+				//app.all_or_my_index = 1;//now we know this comes from myevents
 			};
 
 			Content = new StackLayout
@@ -107,16 +96,12 @@ namespace SCUEvents
 						}
 					},
 					listview_my,
-					home_button
-
 				}
 			};
 		}
 
 		void onButtonClicked(object sender, EventArgs e)
 		{
-			if (sender == home_button)
-				Navigation.PushAsync(new Mainpage());
 		}
 	}
 }

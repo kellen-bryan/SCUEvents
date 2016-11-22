@@ -5,14 +5,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Net;
-using final;
 using System.Diagnostics;
 
 namespace SCUEvents
 {
 	public class EventSpecificPage : ContentPage
 	{
-		Button add_to_events, myevents_button, remove_button, home_button;
+		Button add_to_events, remove_button;
 		Label event_label, desc;
 		Image logo;
 
@@ -20,6 +19,7 @@ namespace SCUEvents
 
 		public EventSpecificPage(EventItem item)
 		{
+			   
 			//get item index
 			for (int i = 0; i < app.AllEvents_collection.Count; i++)
 			{
@@ -39,7 +39,6 @@ namespace SCUEvents
 			event_label = new Label
 			{
 				Text = item.Name,
-				BackgroundColor = Color.Silver,
 				TextColor = Color.Maroon,
 				HorizontalTextAlignment = TextAlignment.Center,
 				FontSize = 30
@@ -47,7 +46,7 @@ namespace SCUEvents
 
 			desc = new Label
 			{
-				Text = "\n\nDate: " + item.Date + "\nTime: " + item.Time + "\n\nthis is a sample description for " + item.Name
+				Text = "\nDate: " + item.Date + "\nTime: " + item.Time + "\nLocation: " + item.Location + "\n\n" + item.Info + " \n\n"
 			};
 
 			add_to_events = new Button
@@ -56,7 +55,7 @@ namespace SCUEvents
 				BorderWidth = 1,
 				BorderColor = Color.Maroon,
 				HeightRequest = 30,
-				WidthRequest = 140,
+				WidthRequest = 160,
 				TextColor = Color.Maroon,
 				VerticalOptions = LayoutOptions.End
 
@@ -68,44 +67,22 @@ namespace SCUEvents
 				BorderWidth = 1,
 				BorderColor = Color.Maroon,
 				HeightRequest = 30,
-				WidthRequest = 140,
+				WidthRequest = 160,
 				TextColor = Color.Maroon,
-				VerticalOptions = LayoutOptions.End
-			};
-
-			myevents_button = new Button
-			{
-				Text = "MyEvents",
-				BorderWidth = 1,
-				BorderColor = Color.Maroon,
-				HeightRequest = 30,
-				WidthRequest = 140,
-				TextColor = Color.Maroon,
-				VerticalOptions = LayoutOptions.End
-			};
-
-			home_button = new Button
-			{
-				Text = "Home",
-				BorderWidth = 1,
-				BorderColor = Color.Maroon,
-				HeightRequest = 30,
-				WidthRequest = 140,
-				TextColor = Color.Maroon,
-				VerticalOptions = LayoutOptions.End
+				VerticalOptions = LayoutOptions.End,
+				IsEnabled = false
 			};
 
 			logo = new Image
 			{
-				Source = ImageSource.FromResource("final.SCU_Events_logo.jpg"),
+				Source = ImageSource.FromResource("SCUEvents.SCU_Events_logo.jpg"),
 				WidthRequest = 300,
 				HeightRequest = 50
 			};
 
 			add_to_events.Clicked += buttonClicked;
-			myevents_button.Clicked += buttonClicked;
 			remove_button.Clicked += buttonClicked;
-			home_button.Clicked += buttonClicked;
+
 
 
 			Content = new StackLayout
@@ -115,19 +92,29 @@ namespace SCUEvents
 				{
 					logo,
 					event_label,
-
 					desc,
+
 					new StackLayout{
 						VerticalOptions = LayoutOptions.End,
-						Children= {
+						Children=
+						{
 							add_to_events,
 							remove_button,
-							myevents_button,
-							home_button
 						}
 					}
 				}
 			};
+
+			if (app.MyEvents_collection.Contains(item))
+			{
+				remove_button.IsEnabled = true;
+				add_to_events.IsEnabled = false;
+			}
+			else
+			{
+				remove_button.IsEnabled = false;
+				add_to_events.IsEnabled = true;
+			}
 		}
 
 		void buttonClicked(object sender, EventArgs e)
@@ -136,10 +123,8 @@ namespace SCUEvents
 			{
 				app.MyEvents_collection.Add(app.AllEvents_collection[app.current_event_index]);
 				DisplayAlert("Go Broncos!", "This event has been added to your MyEvents Page", "OK");
-			}
-			else if (sender == myevents_button)
-			{
-				Navigation.PushAsync(new MyEventsPage());
+				add_to_events.IsEnabled = false;
+				remove_button.IsEnabled = true;
 			}
 			else if (sender == remove_button)
 			{
@@ -148,9 +133,9 @@ namespace SCUEvents
 				else
 					app.MyEvents_collection.Remove(app.MyEvents_collection[app.current_event_index]);
 				DisplayAlert("Success", "Event has been removed", "OK");
+				add_to_events.IsEnabled = true;
+				remove_button.IsEnabled = false;
 			}
-			else if (sender == home_button)
-				Navigation.PushAsync(new Mainpage());
 		}
 	}
 }
