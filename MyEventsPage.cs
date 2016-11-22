@@ -12,7 +12,7 @@ namespace SCUEvents
 	public class MyEventsPage : ContentPage
 	{
 		Label main_label;
-		Button day_button, month_button, week_button;
+		Button day_button, month_button, week_button, home_button;
 		Image logo;
 		ListView listview_my;
 
@@ -25,7 +25,7 @@ namespace SCUEvents
 
 			logo = new Image
 			{
-				Source = ImageSource.FromResource("SCUEvents.SCU_Events_logo.jpg"),
+				Source = ImageSource.FromResource("final.SCU_Events_logo.jpg"),
 				WidthRequest = 300,
 				HeightRequest = 50
 			};
@@ -63,17 +63,32 @@ namespace SCUEvents
 				TextColor = Color.Maroon,
 			};
 
+			home_button = new Button
+			{
+				Text = "Home",
+				BorderWidth = 1,
+				BorderColor = Color.Maroon,
+				HeightRequest = 30,
+				WidthRequest = 140,
+				TextColor = Color.Maroon,
+				VerticalOptions = LayoutOptions.End
+			};
+
+			home_button.Clicked += onButtonClicked;
+
 			listview_my.ItemTapped += async (sender, e) =>
 			{
 			Debug.WriteLine("Tapped: " + e.Item);
 				//await DisplayAlert("Tapped", e.Item + " row was tapped", "OK");
-				await Navigation.PushAsync(new EventSpecificPage(app.AllEvents_collection[0]));
+				await Navigation.PushAsync(new EventSpecificPage((EventItem)listview_my.SelectedItem));
 			((ListView)sender).SelectedItem = null; // de-select the row
+				app.all_or_my_index = 1;//now we know this comes from myevents
 			};
 
 			Content = new StackLayout
 			{
 				Orientation = StackOrientation.Vertical,
+				Padding = 20,
 				Children =
 				{
 					logo,
@@ -91,10 +106,17 @@ namespace SCUEvents
 							month_button
 						}
 					},
-					listview_my
+					listview_my,
+					home_button
 
 				}
 			};
+		}
+
+		void onButtonClicked(object sender, EventArgs e)
+		{
+			if (sender == home_button)
+				Navigation.PushAsync(new Mainpage());
 		}
 	}
 }

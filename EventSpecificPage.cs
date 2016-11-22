@@ -12,7 +12,7 @@ namespace SCUEvents
 {
 	public class EventSpecificPage : ContentPage
 	{
-		Button add_to_events, myevents_button, remove_button;
+		Button add_to_events, myevents_button, remove_button, home_button;
 		Label event_label, desc;
 		Image logo;
 
@@ -23,8 +23,16 @@ namespace SCUEvents
 			//get item index
 			for (int i = 0; i < app.AllEvents_collection.Count; i++)
 			{
-				if (string.Equals(item.Name, app.AllEvents_collection[i].Name) == true)
-					app.current_event_index = i;
+				if (app.all_or_my_index == 0)
+				{
+					if (string.Equals(item.Name, app.AllEvents_collection[i].Name) == true)
+						app.current_event_index = i;
+				}
+				else
+				{
+					if (string.Equals(item.Name, app.MyEvents_collection[i].Name) == true)
+						app.current_event_index = i;
+				}
 			}
 
 
@@ -76,6 +84,17 @@ namespace SCUEvents
 				VerticalOptions = LayoutOptions.End
 			};
 
+			home_button = new Button
+			{
+				Text = "Home",
+				BorderWidth = 1,
+				BorderColor = Color.Maroon,
+				HeightRequest = 30,
+				WidthRequest = 140,
+				TextColor = Color.Maroon,
+				VerticalOptions = LayoutOptions.End
+			};
+
 			logo = new Image
 			{
 				Source = ImageSource.FromResource("final.SCU_Events_logo.jpg"),
@@ -86,6 +105,7 @@ namespace SCUEvents
 			add_to_events.Clicked += buttonClicked;
 			myevents_button.Clicked += buttonClicked;
 			remove_button.Clicked += buttonClicked;
+			home_button.Clicked += buttonClicked;
 
 
 			Content = new StackLayout
@@ -102,7 +122,8 @@ namespace SCUEvents
 						Children= {
 							add_to_events,
 							remove_button,
-							myevents_button
+							myevents_button,
+							home_button
 						}
 					}
 				}
@@ -122,9 +143,14 @@ namespace SCUEvents
 			}
 			else if (sender == remove_button)
 			{
-				DisplayAlert("Success","Event has been removed", "OK");
-				app.MyEvents_collection.Remove(app.AllEvents_collection[app.current_event_index]);
+				if (app.all_or_my_index == 0)
+					app.MyEvents_collection.Remove(app.AllEvents_collection[app.current_event_index]);
+				else
+					app.MyEvents_collection.Remove(app.MyEvents_collection[app.current_event_index]);
+				DisplayAlert("Success", "Event has been removed", "OK");
 			}
+			else if (sender == home_button)
+				Navigation.PushAsync(new Mainpage());
 		}
 	}
 }

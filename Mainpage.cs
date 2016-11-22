@@ -25,34 +25,36 @@ namespace SCUEvents
 			listview_all = new ListView();
 			listview_all.ItemsSource = app.AllEvents_collection;
 
-
-			app.AllEvents_collection.Add(new EventItem
+			if (app.AllEvents_collection.Count == 0)//w/out this line the page adds another set of sample data
 			{
-				Name = "Day Event",
-				Date = "Date",
-				Location = "Location",
-				Time = "Time",
-				Info = "Info"
-			});
 
-			app.AllEvents_collection.Add(new EventItem
-			{
-				Name = "Week Event",
-				Date = "Date",
-				Location = "Location",
-				Time = "Time",
-				Info = "Info"
-			});
+				app.AllEvents_collection.Add(new EventItem
+				{
+					Name = "Day Event",
+					Date = "Date",
+					Location = "Location",
+					Time = "Time",
+					Info = "Info"
+				});
 
-			app.AllEvents_collection.Add(new EventItem
-			{
-				Name = "Month Event",
-				Date = "Date",
-				Location = "Location",
-				Time = "Time",
-				Info = "Info"
-			});
+				app.AllEvents_collection.Add(new EventItem
+				{
+					Name = "Week Event",
+					Date = "Date",
+					Location = "Location",
+					Time = "Time",
+					Info = "Info"
+				});
 
+				app.AllEvents_collection.Add(new EventItem
+				{
+					Name = "Month Event",
+					Date = "Date",
+					Location = "Location",
+					Time = "Time",
+					Info = "Info"
+				});
+			}
 
 			logo = new Image
 			{
@@ -108,9 +110,9 @@ namespace SCUEvents
 			listview_all.ItemTapped += async (sender, e) =>
 			{
 			Debug.WriteLine("Tapped: " + e.Item);
-				//await DisplayAlert("Tapped", e.Item + " row was tapped", "OK");
 				await Navigation.PushAsync(new EventSpecificPage((EventItem)listview_all.SelectedItem));
 			((ListView)sender).SelectedItem = null; // de-select the row
+				app.all_or_my_index = 0;//now we know this comes from home
 			};
 
 			NavigationPage.SetHasNavigationBar(this, false);
