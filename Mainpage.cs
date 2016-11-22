@@ -36,7 +36,7 @@ namespace SCUEvents
 
 			if (app.AllEvents_collection.Count == 0)//w/out this line the page adds another set of sample data
 			{
-
+				//manually imputting example data
 				app.AllEvents_collection.Add(new EventItem
 				{
 					Name = "Men's Basketball vs. Gonzaga",
@@ -67,7 +67,8 @@ namespace SCUEvents
 
 			logo = new Image
 			{
-				Source = ImageSource.FromResource("SCUEvents.SCU_Events_logo.jpg"),
+				Source = ImageSource.FromResource("SCUEvents.SCU_Events_logo.jpg"), 
+				HorizontalOptions = LayoutOptions.Center, //embedded resource image
 				WidthRequest = 300,
 				HeightRequest = 50
 			};
@@ -115,15 +116,16 @@ namespace SCUEvents
 			};
 
 			my_events_nav.Clicked += buttonClicked;
+			search_entry.PropertyChanged += buttonClicked;
 
+
+			//navigation when user selects specific event
 			listview_all.ItemTapped += async (sender, e) =>
 			{
 				this.Title = "Home";
 				Debug.WriteLine("Tapped: " + e.Item);
 				await Navigation.PushAsync(new EventSpecificPage((EventItem)listview_all.SelectedItem));
 				((ListView)sender).SelectedItem = null; // de-select the row
-				app.all_or_my_index = 0;//now we know this comes from home
-
 			};
 
 			//hides nav bar on main page
@@ -162,7 +164,7 @@ namespace SCUEvents
 		{
 			if (sender == my_events_nav)
 			{
-				Navigation.PushAsync(new MyEventsPage());
+				Navigation.PushAsync(new MyEventsPage()); //navigate to MyEvents page
 				this.Title = "Home";
 			}
 

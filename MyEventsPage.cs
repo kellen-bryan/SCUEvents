@@ -71,7 +71,6 @@ namespace SCUEvents
 				//await DisplayAlert("Tapped", e.Item + " row was tapped", "OK");
 				await Navigation.PushAsync(new EventSpecificPage((EventItem)listview_my.SelectedItem));
 				((ListView)sender).SelectedItem = null; // de-select the row
-				//app.all_or_my_index = 1;//now we know this comes from myevents
 			};
 
 			Content = new StackLayout
