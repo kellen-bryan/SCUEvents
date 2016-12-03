@@ -14,25 +14,31 @@ namespace SCUEvents
 		Button add_to_events, remove_button;
 		Label event_label, desc;
 		Image logo;
+		int all_index, my_index;
 
 		App app = (App)Application.Current;
 
 		public EventSpecificPage(EventItem item)
 		{
-			   
-			//get item index
+
+			//get AllEvents index
 			for (int i = 0; i < app.AllEvents_collection.Count; i++)
 			{
-				if (app.all_or_my_index == 0)
+				if (string.Equals(item.Name, app.AllEvents_collection[i].Name) == true)
+					all_index = i;
+			}
+
+			//get myEvents index and set AllEvents isFav
+			for (int i = 0; i < app.MyEvents_collection.Count; i++)
+			{
+				if (string.Equals(item.Name, app.MyEvents_collection[i].Name) == true)
 				{
-					if (string.Equals(item.Name, app.AllEvents_collection[i].Name) == true)
-						app.current_event_index = i;
+					my_index = i;
+					app.AllEvents_collection[all_index].IsFavorited = true;
+					break;
 				}
-				else
-				{
-					if (string.Equals(item.Name, app.MyEvents_collection[i].Name) == true)
-						app.current_event_index = i;
-				}
+				else 
+					app.AllEvents_collection[all_index].IsFavorited = false;
 			}
 
 
@@ -72,7 +78,6 @@ namespace SCUEvents
 				WidthRequest = 160,
 				TextColor = Color.Maroon,
 				VerticalOptions = LayoutOptions.End,
-				IsVisible = false
 			};
 
 			logo = new Image
@@ -84,6 +89,9 @@ namespace SCUEvents
 
 			add_to_events.Clicked += buttonClicked;
 			remove_button.Clicked += buttonClicked;
+
+			//set add/remove button
+			setAddRemove();
 
 			Content = new StackLayout
 			{
@@ -104,39 +112,52 @@ namespace SCUEvents
 					}
 				}
 			};
-
-			//makes proper button visible to user
-			if (app.MyEvents_collection.Contains(item))
-			{
-				remove_button.IsVisible = true;
-				add_to_events.IsVisible = false;
-			}
-			else
-			{
-				remove_button.IsVisible = false;
-				add_to_events.IsVisible = true;
-			}
 		}
 
 		void buttonClicked(object sender, EventArgs e)
 		{
 			if (sender == add_to_events)
 			{
-				app.MyEvents_collection.Add(app.AllEvents_collection[app.current_event_index]);
+				app.AllEvents_collection[all_index].IsFavorited = true;
+
+				app.MyEvents_collection.Add(app.AllEvents_collection[all_index]);
+
+				setAddRemove();
+
+				app.AppData.saveData();
+
 				DisplayAlert("Go Broncos!", "This event has been added to your MyEvents Page", "OK");
-				add_to_events.IsVisible = false;
-				remove_button.IsVisible = true;
+			
 			}
+
 			else if (sender == remove_button)
 			{
-				if (app.all_or_my_index == 0)
-					app.MyEvents_collection.Remove(app.AllEvents_collection[app.current_event_index]);
-				else
-					app.MyEvents_collection.Remove(app.MyEvents_collection[app.current_event_index]);
+				app.AllEvents_collection[all_index].IsFavorited = false;
+
+				app.MyEvents_collection.Remove(app.MyEvents_collection[my_index]);
+
+				setAddRemove();
+
+				app.AppData.saveData();
+
 				DisplayAlert("Success", "Event has been removed", "OK");
+			}
+		}
+
+		void setAddRemove()
+		{
+			if (app.AllEvents_collection[all_index].IsFavorited == false)
+			{
 				add_to_events.IsVisible = true;
 				remove_button.IsVisible = false;
 			}
+
+			else
+			{
+				add_to_events.IsVisible = false;
+				remove_button.IsVisible = true;
+			}
 		}
+			
 	}
 }

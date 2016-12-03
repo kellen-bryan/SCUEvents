@@ -16,6 +16,7 @@ namespace SCUEvents
 		{
 			var doc = new HtmlDocument();
 			doc.LoadHtml(url);
+			System.Diagnostics.Debug.WriteLine(doc.ToString());
 
 			foreach (HtmlNode node in doc.DocumentNode.Descendants("//@lw_events_title"))
 			{

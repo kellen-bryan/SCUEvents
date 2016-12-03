@@ -6,22 +6,33 @@ namespace SCUEvents
 {
 	public partial class App : Application
 	{
+		//public const string app_Data = "app_Data";
+
 		public App()
 		{
+			// Load previous AppData if it exists
+			AppData = new AppData();
+			AppData.loadData();
+		
 			AllEvents_collection = new ObservableCollection<EventItem>();
 
-			MyEvents_collection = new ObservableCollection<EventItem>();
+			Sorted_collection = new ObservableCollection<EventItem>();
 
 			MainPage = new NavigationPage(new Mainpage());
+
 		}
 
-		public IList<EventItem> AllEvents_collection { private set; get; }
+		public AppData AppData { set; get; }
 
-		public IList<EventItem> MyEvents_collection { private set; get; }
+		public ObservableCollection<EventItem> AllEvents_collection { private set; get; }
 
-		public int current_event_index { set; get; }
+		public ObservableCollection<EventItem> MyEvents_collection
+		{
+			set { AppData.InfoCollection = value; }
+			get { return AppData.InfoCollection; }
+		}
 
-		public int all_or_my_index { set; get; }
+		public ObservableCollection<EventItem> Sorted_collection { private set; get; }
 
 		/*this tracks whether a move to an event specific page came from my events or home. 
 		 * the index of an event in the home list is often different from the index of the same event in the my events list.
@@ -31,17 +42,17 @@ namespace SCUEvents
 		 * 1 means it came from myevents
 		 */
 
-
+		//data keys for returning OnSleep data
 
 
 		protected override void OnStart()
 		{
-			// Handle when your app starts
 		}
 
 		protected override void OnSleep()
 		{
-			// Handle when your app sleeps
+			// Save AppData serialized into string.
+			AppData.saveData();
 		}
 
 		protected override void OnResume()
