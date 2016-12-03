@@ -176,7 +176,7 @@ namespace SCUEvents
 				}
 			}
 			else if (sender == show_all_button)
-				listview_my.ItemsSource = app.AllEvents_collection;
+				listview_my.ItemsSource = app.MyEvents_collection;
 
 		}
 	}
