@@ -30,7 +30,7 @@ namespace SCUEvents
 			{
 				ItemsSource = app.AllEvents_collection,
 				SeparatorColor = Color.Maroon,
-				IsPullToRefreshEnabled = true
+				IsPullToRefreshEnabled = true,
 			};
 
 			//call when refreshing
@@ -45,7 +45,8 @@ namespace SCUEvents
 					Date = DateTime.Today,
 					Location = "Leavy Athletic Center",
 					Time = "7:00PM",
-					Info = "Santa Clara Men's basketball team faces off against #14 ranked Gonzaga"
+					Info = "Santa Clara Men's basketball team faces off against #14 ranked Gonzaga",
+					Source = "https://www.scu.edu/media/offices/omc/scu-brand-guidelines/visual-identity-amp-photography/visual-identity-toolkit/logos-amp-seals/Athletics_Primary(onWhiteOrBlack)-360x207.png"
 				});
 
 				app.AllEvents_collection.Add(new EventItem
@@ -55,6 +56,7 @@ namespace SCUEvents
 					Location = "Art Building",
 					Time = "12:00PM-7:00PM",
 					Info = "Undergraduates show off their photography skills in new exhibit, this week only",
+					Source = "http://www.clipartbest.com/cliparts/dir/e5L/dire5Lp5T.png"
 				});
 
 				app.AllEvents_collection.Add(new EventItem
@@ -64,6 +66,7 @@ namespace SCUEvents
 					Location = "Mayer Theatre",
 					Time = "6:00PM",
 					Info = "The SCU jazz ensemble will be performing their holidy concert",
+					Source = "http://www.scupresents.org/sites/default/files/styles/half/public/COLORSmallImageMusic@Noon.jpg?itok=BpsG08Ae"
 				});
 			}
 
@@ -178,7 +181,7 @@ namespace SCUEvents
 		{
 			if (sender == my_events_nav)
 			{
-				Navigation.PushAsync(new MyEventsPage()); //navigate to MyEvents page
+				Navigation.PushAsync(new MyEvents()); //navigate to MyEvents page
 				this.Title = "Home";
 			}
 

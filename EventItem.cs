@@ -1,26 +1,82 @@
 ﻿using System;
 using Xamarin.Forms;
 using System.Xml.Serialization;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace SCUEvents
 {
-	public class EventItem
+	public class EventItem : ViewModelBase
 	{
-		public string Name { get; set; }
+		App app = (App)Application.Current;
+		string _name, _location, _time, _info, _source;
+		DateTime _date;
+		bool _isFav;
 
-		public DateTime Date { get; set; }
+		[XmlIgnore]
+		public ObservableCollection<EventItem> myList
+		{
+			get { return app.MyEvents_collection; }
+		}
 
-		public string Location { get; set; }
+		public void RemoveItem(EventItem item)
+		{
+			app.MyEvents_collection.Remove(this);
+		}
 
-		public string Time { get; set; }
+		public EventItem()
+		{
+			RemoveCommand = new Command(() => RemoveItem(this));
+		}
 
-		public string Info { get; set; }
+		public string Source
+		{
+			set { SetProperty(ref _source, value); }
+			get { return _source; }
+		}
 
-		public bool IsFavorited { get; set; }
+		public string Name
+		{
+			set { SetProperty(ref _name, value); }
+			get { return _name; }
+		}
+
+		public DateTime Date
+		{
+			set { SetProperty(ref _date, value); }
+			get { return _date; }
+		}
+
+		public string Location
+		{
+			set { SetProperty(ref _location, value); }
+			get { return _location; }
+		}
+
+		public string Time
+		{
+			set { SetProperty(ref _time, value); }
+			get { return _time; }
+		}
+
+		public string Info
+		{
+			set { SetProperty(ref _info, value); }
+			get { return _info; }
+		}
+
+		public bool IsFavorited
+		{
+			set { SetProperty(ref _isFav, value); }
+			get { return _isFav; }
+		}
 
 		public override string ToString()
 		{
 			return String.Format("{0}", String.IsNullOrWhiteSpace(Name) ? "???" : Name);
 		}
+
+		[XmlIgnore]
+		public ICommand RemoveCommand { private set; get; }
 	}
 }

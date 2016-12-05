@@ -13,7 +13,7 @@ namespace SCUEvents
 	{
 		Button add_to_events, remove_button;
 		Label event_label, desc;
-		Image logo;
+		Image logo, event_image1, event_image2;
 		int all_index, my_index;
 
 		App app = (App)Application.Current;
@@ -45,16 +45,38 @@ namespace SCUEvents
 			event_label = new Label
 			{
 				Text = item.Name,
+				FontAttributes = FontAttributes.Bold,
+				//FontFamily = Device.OnPlatform ("Eczar-ExtraBold", "null", "null"),
 				TextColor = Color.Maroon,
+				FontSize = 20,
 				HorizontalTextAlignment = TextAlignment.Center,
-				FontSize = 30
+				HorizontalOptions = LayoutOptions.Center,
 			};
+
+			Uri uri = new Uri(item.Source);
+
+			event_image1 = new Image
+			{
+				WidthRequest = 70,
+				HeightRequest = 70,
+				Source = uri
+			};
+
+			event_image2 = new Image
+			{
+				WidthRequest = 70,
+				HeightRequest = 70,
+				Source = uri
+			};
+
 
 			desc = new Label
 			{
-				Text = "\nDate: " + item.Date + "\nTime: " + item.Time + "\nLocation: " + item.Location + "\n\n" + item.Info + " \n\n",
+				Text = "Date: " + item.Date + "\nTime: " + item.Time + "\nLocation: " + item.Location + "\n\n" + item.Info,
 				HorizontalTextAlignment = TextAlignment.Center,
-				FontAttributes = FontAttributes.Bold
+				//FontFamily = Device.OnPlatform("Eczar-Regular", "null", "null")
+				FontAttributes = FontAttributes.Italic,
+				TextColor = Color.Maroon
 			};
 
 			add_to_events = new Button
@@ -99,10 +121,32 @@ namespace SCUEvents
 				Children =
 				{
 					logo,
-					event_label,
-					desc,
 
-					new StackLayout{
+					
+					new StackLayout
+					{
+						Orientation = StackOrientation.Horizontal,
+						Padding = 20,
+						HorizontalOptions = LayoutOptions.CenterAndExpand,
+						Spacing = 20,
+						Children =
+						{
+							event_image1,
+							event_label,
+							event_image2
+						}
+					},
+
+					new Frame
+					{
+						OutlineColor = Color.Maroon,
+						HasShadow = false,
+						Content = desc
+
+					},
+
+					new StackLayout
+					{
 						VerticalOptions = LayoutOptions.End,
 						Children=
 						{
