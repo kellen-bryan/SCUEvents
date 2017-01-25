@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+		xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+		x:Class="SCUEvents.HomePage"
+		xmlns:local="clr-namespace:SCUEvents;assembly=SCUEvents">
+
+		<ContentPage.Padding>
+        <OnPlatform x:TypeArguments="Thickness"
+                    iOS="0, 20, 0, 5" />
+	    </ContentPage.Padding>
+
+		<ContentPage.BindingContext>
+	        <local:EventItem />
+	    </ContentPage.BindingContext>
+
+	
+	    <StackLayout>
+
+			<Image Source = "{local:ImageResource SCUEvents.SCU_Events_logo.jpg}"
+					WidthRequest = "500"
+					HeightRequest = "50"/>
+			<Entry x:Name = "search_entry"
+				Placeholder = "Search"
+				WidthRequest = "500"
+				HeightRequest = "50"
+				PropertyChanged = "buttonClicked"/>
+
+			<StackLayout
+					Orientation = "Horizontal"
+					HorizontalOptions = "CenterAndExpand"
+					Spacing = "50">
+				<Button x:Name = "day_button"
+						Text = "Day"
+						HeightRequest = "50"
+						WidthRequest = "70"
+						TextColor = "Maroon" 
+						Clicked = "buttonClicked"/>
+				<Button x:Name = "week_button"
+						Text = "Week"
+						HeightRequest = "50"
+						WidthRequest = "70"
+						TextColor = "Maroon" 
+						Clicked = "buttonClicked"/>
+				<Button x:Name = "month_button"
+						Text = "Month"
+						HeightRequest = "50"
+						WidthRequest = "80"
+						TextColor = "Maroon"
+						Clicked = "buttonClicked"/>
+			</StackLayout>
+
+			<StackLayout>
+				<Button x:Name = "show_all_button"
+					Text = "Show All Events"
+					WidthRequest = "140"
+					HeightRequest = "50"
+					BorderWidth = "1"
+					BorderColor = "Maroon"
+					TextColor = "Maroon"
+					Clicked = "buttonClicked"/>
+			</StackLayout>
+
+			<ListView x:Name = "listview_all"
+					ItemsSource="{Binding allList}"
+					SeparatorColor = "Maroon">
+				<ListView.ItemTemplate>
+					<DataTemplate>
+						<ImageCell ImageSource ="{Binding Source}"
+									Text ="{Binding Name}"
+									Detail ="{Binding Date, StringFormat=\{0:d\}}">
+						</ImageCell>
+					</DataTemplate>
+				</ListView.ItemTemplate>
+			</ListView>
+			
+			<Button x:Name = "my_events_nav"
+				Text = "MyEvents"
+				BorderWidth = "1"
+				BorderColor = "Maroon"
+				HeightRequest = "50"
+				WidthRequest = "140"
+				TextColor = "Maroon"
+				Clicked = "buttonClicked"/>
+		</StackLayout>
+
+	
+</ContentPage>

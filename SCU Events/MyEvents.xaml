@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+		xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+		x:Class="SCUEvents.MyEvents"
+		xmlns:local="clr-namespace:SCUEvents;assembly=SCUEvents">
+	
+	<ContentPage.Padding>
+        <OnPlatform x:TypeArguments="Thickness"
+                    iOS="0, 20, 0, 5" />
+    </ContentPage.Padding>
+
+	<ContentPage.BindingContext>
+        <local:EventItem />
+    </ContentPage.BindingContext>
+
+	
+    <StackLayout>
+
+		<Image Source = "{local:ImageResource SCUEvents.SCU_Events_logo.jpg}"
+				WidthRequest = "300"
+				HeightRequest = "50"/>
+		
+		<Label Text = "MyEvents"
+				TextColor = "Maroon"
+				HorizontalTextAlignment = "Center"
+				FontSize = "40" />
+		<StackLayout
+				Orientation = "Horizontal"
+				HorizontalOptions = "CenterAndExpand"
+				Spacing = "50">
+			<Button x:Name = "day_button"
+					Text = "Day"
+					HeightRequest = "30"
+					WidthRequest = "70"
+					TextColor = "Maroon" 
+					Clicked = "onButtonClicked"/>
+			<Button x:Name = "week_button"
+					Text = "Week"
+					HeightRequest = "50"
+					WidthRequest = "70"
+					TextColor = "Maroon" 
+					Clicked = "onButtonClicked"/>
+			<Button x:Name = "month_button"
+					Text = "Month"
+					HeightRequest = "30"
+					WidthRequest = "80"
+					TextColor = "Maroon"
+					Clicked = "onButtonClicked"/>
+		</StackLayout>
+		
+		<ListView x:Name = "listview_my"
+					ItemsSource="{Binding myList}"
+					SeparatorColor = "Maroon">
+			<ListView.ItemTemplate>
+				<DataTemplate>
+					<ImageCell ImageSource ="{Binding Source}"
+								Text ="{Binding Name}"
+								Detail ="{Binding Date, StringFormat=\{0:d\}}">
+						<ImageCell.ContextActions>
+                            <MenuItem Text="Remove"
+                                      IsDestructive="True"
+                                      Command="{Binding RemoveCommand}" />	
+						</ImageCell.ContextActions>
+						
+					</ImageCell>
+				</DataTemplate>
+			</ListView.ItemTemplate>
+		</ListView>
+
+		<Button x:Name = "show_all_button"
+				Text = "Show All Events"
+				TextColor ="Maroon"
+				BorderWidth = "1"
+				BorderColor = "Maroon"
+				HeightRequest = "50"
+				WidthRequest = "140"
+				Clicked = "onButtonClicked"/>
+		
+	</StackLayout>
+	
+</ContentPage>
